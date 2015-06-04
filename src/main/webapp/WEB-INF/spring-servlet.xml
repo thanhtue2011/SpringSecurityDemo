@@ -23,15 +23,31 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
 	<context:component-scan base-package="com.asiantech.spring" />
 	<mvc:annotation-driven />
-	<beans:bean
+	<!--  <beans:bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
 		<beans:property name="prefix" value="/WEB-INF/pages/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
-	<beans:bean id="dataSource"
+	-->
+	<beans:bean id="templateResolver"
+		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<beans:property name="prefix" value="/WEB-INF/pages/" />
+		<beans:property name="suffix" value=".html" />
+		<beans:property name="templateMode" value="HTML5" />
+		<beans:property name="cacheable" value="true" />
+	</beans:bean>
+	<beans:bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<beans:property name="templateResolver" ref="templateResolver" />
+	</beans:bean>
+	<beans:bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+		<beans:property name="templateEngine" ref="templateEngine" />
+		<beans:property name="order" value="1" />
+		<beans:property name="viewNames" value="/" />
+	</beans:bean>
+	<!-- database -->
+	<!--  <beans:bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/account" />
@@ -57,7 +73,8 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 		class="org.springframework.orm.jpa.JpaTransactionManager">
 		<beans:property name="entityManagerFactory" ref="entityManagerFactory" />
 	</beans:bean>
-	
+    
+ -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<beans:bean id="multipartResolver"

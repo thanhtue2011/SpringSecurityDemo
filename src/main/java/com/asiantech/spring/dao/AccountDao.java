@@ -5,6 +5,7 @@ import java.util.List;
 import com.asiantech.spring.etity.Account;
 
 public interface AccountDao {
+		
 	    public void editAccount(Account account);
 	    public List<Account> listAccount();
 	    public List<Account> SearchlistAccount(String name);
@@ -16,5 +17,7 @@ public interface AccountDao {
 	    public int getAllTotalSearch(String name);
 	    public List<Account>  getLimitAccountSearch(int limit, int offset,String name);
 	    public List<Account> getPage(int page);
+	   public void setMsg(String msg);
+	   public String getMsg();
 
 }

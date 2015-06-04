@@ -1,6 +1,7 @@
 package com.asiantech.spring.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,40 +28,15 @@ import com.asiantech.spring.service.AccountService;
 public class AccountController {
 	    @Autowired
 	    private AccountDao accountDao;
-	    private List<Account>  listAccount;
+	    private Account account = new Account();
+	    private List<Account>  listAccount= new ArrayList<Account>();
+	    private List<Account>  listAccount2= new ArrayList<Account>();;
+	    private List<Account>  listAccountAcc;
 	    public List<Account> getAccounts() {
 	        return listAccount;
 	    }
-	   
-	    @RequestMapping(value = "/list", method = RequestMethod.GET)
-	    public ModelAndView getAccount(@RequestParam(value="page",required=false) Integer page,HttpServletRequest request) {
-	        if(page==null)
-	        	page=1;
-	        page = Integer.parseInt(request.getParameter("page"));
-	    	int limit = 5;
-	    	int end =0;
-	    	int dem=0;
-	        int  totalrecord = accountDao.getAllTotal();
-	        for(int i=1;i<=totalrecord;i=i+limit){
-	        	end=end+limit;
-	        	dem++;
-	        	
-	        }
-	    	List<Account> listAccountAcc = accountDao.getLimitAccount(limit,(page*limit-limit));
-	    	listAccount=listAccountAcc;
-	    	ModelAndView model = new ModelAndView("list");
-	        model.addObject("page", page);
-	        model.addObject("limit", limit);
-		    model.addObject("totalrecord", totalrecord);
-		    model.addObject("iend", dem);
-	        model.addObject("listAccount", listAccount);
-	        Account newAccount = new Account();
-	        model.addObject("account", newAccount);
-	       
-	        return model;
-	    }
-	    @RequestMapping(value="/")
-	    public String listAccount(ModelMap model) throws IOException{
+	    @RequestMapping("/")
+	    public String listthymleaf( ModelMap model) {
 	    	int page=1;
 	    	int limit = 5;
 	    	int end =0;
@@ -80,12 +56,116 @@ public class AccountController {
 	        model.put("listAccount", listAccount);
 	        Account newAccount = new Account();
 	        model.put("account", newAccount);
+	        return "listthymleaf";
+	    }
+	    @RequestMapping(value = "/thymeleafpage", method = RequestMethod.GET)
+	    public ModelAndView getAccountThymeleaf(@RequestParam(value="page",required=false) Integer page,HttpServletRequest request,@RequestParam(value="limit",required=false) Integer limit) {
+	        if(page==null)
+	        	page=1;
+	        //page = Integer.parseInt(request.getParameter("page"));
+	        if(limit==null)
+	        	limit=5;
+	        //limit = Integer.parseInt(request.getParameter("limit"));
+	    	int end =0;
+	    	int dem=0;
+	        int  totalrecord = accountDao.getAllTotal();
+	        for(int i=1;i<=totalrecord;i=i+limit){
+	        	end=end+limit;
+	        	dem++;
+	        	
+	        }
+	    	List<Account> listAccountAcc = accountDao.getLimitAccount(limit,(page*limit-limit));
+	    	
+	    	listAccount=listAccountAcc;
+	    	
+	    	ModelAndView model = new ModelAndView("listthymleaf");
+	        model.addObject("page", page);
+	        model.addObject("limit", limit);
+		    model.addObject("totalrecord", totalrecord);
+		    model.addObject("iend", dem);
+	        model.addObject("listAccount", listAccount);
+	        model.addObject("msg", accountDao.getMsg());
+	        Account newAccount = new Account();
+	        model.addObject("account", newAccount);
+	        accountDao.setMsg("");
+	        return model;
+	    }
+
+	    public List<Account> copyAccount(List<Account> listAccount,List<Account> listAccount2){
+	    	//listAccount.removeAll(listAccount);
+	    	listAccount.addAll(listAccount2);
+	    	return listAccount;
+	    }
+	    
+	    @RequestMapping(value = "/list", method = RequestMethod.GET)
+	    public ModelAndView getAccount(@RequestParam(value="page",required=false) Integer page,HttpServletRequest request) {
+	        if(page==null)
+	        	page=1;
+	        page = Integer.parseInt(request.getParameter("page"));
+	    	int limit = 5;
+	    	int end =0;
+	    	int dem=0;
+	        int  totalrecord = accountDao.getAllTotal();
+	        for(int i=1;i<=totalrecord;i=i+limit){
+	        	end=end+limit;
+	        	dem++;
+	        	
+	        }
+	    	List<Account> listAccountAcc = accountDao.getLimitAccount(limit,(page*limit-limit));
+	    	
+	    	listAccount=listAccountAcc;
+	    	
+	    	ModelAndView model = new ModelAndView("list");
+	        model.addObject("page", page);
+	        model.addObject("limit", limit);
+		    model.addObject("totalrecord", totalrecord);
+		    model.addObject("iend", dem);
+	        model.addObject("listAccount", listAccount);
+	        Account newAccount = new Account();
+	        model.addObject("account", newAccount);
+	       
+	        return model;
+	    }
+	   /* @RequestMapping(value="/")
+	    public String listAccount(ModelMap model) throws IOException{
+	    	int page=1;
+	    	int limit = 5;
+	    	int end =0;
+	    	int dem=0;
+	        int  totalrecord = accountDao.getAllTotal();
+	        for(int i=1;i<=totalrecord;i=i+limit){
+	        	end=end+limit;
+	        	dem++;
+	        	
+	        }
+	    	List<Account> listAccountAcc = accountDao.getLimitAccount(limit,(page*limit-limit));
+	    	//listAccount.addAll(listAccountAcc);
+	    	//copyAccount(listAccount,listAccountAcc);
+	    	// Account account=new  Account(01,"333","33333","333333");
+	    	 //copyAccount(listAccountAcc,listAccount);
+	    	// listAccount.add(account);
+	    	/*for(int i=0;i<listAccount.size();i++){
+	    		System.out.println("sdvdgfsfgsg"+listAccount.size());
+	    	System.out.println(listAccount.get(i).getId());
+	    	System.out.println(listAccount.get(i).getName());
+	    	System.out.println(listAccount.get(i).getFirstname());
+	    	System.out.println(listAccount.get(i).getLastname());
+	    		//System.out.println("fdgdggg");
+	       }
+	    	listAccount=listAccountAcc;
+	        model.put("page", page);
+	        model.put("limit", limit);
+		    model.put("totalrecord", totalrecord);
+		    model.put("iend", dem);
+	        model.put("listAccount", listAccount);
+	        Account newAccount = new Account();
+	        model.put("account", newAccount);
 	       
 	        //model.setViewName("list");
 	        
 	     
 	        return "/list";
-	    }
+	    }*/
 	    
 	    //new
 	    @RequestMapping(value = "/addAccount", method = RequestMethod.GET)
@@ -96,17 +176,33 @@ public class AccountController {
 	        return model;
 	    }
 	    //delete list method post
-	    @RequestMapping(value="/deletelist",method=RequestMethod.POST)
-	    public String detetelist(int id){
-	    	listAccount.remove(id);
+	    @RequestMapping(value="/deletelist",method=RequestMethod.GET)
+	    public String detetelist(HttpServletRequest request){
+	    	//copyAccount(listAccountAcc,listAccount);
+	    	int id = Integer.parseInt(request.getParameter("id"));
+	    	if(account.getId()==id){
+	    	     listAccount.remove(account);
+	    	     System.out.println("Da xoa"+id);
+	    	}
 		     return "redirect:/";
 	    }
 	    //new list method post
 	    @RequestMapping(value="/addlist",method=RequestMethod.POST)
-	    public String addlist(int id, String name, String firstname,String lastname,ModelMap model){
-	    	 Account account=new  Account(id,name,firstname,lastname);
+	    public String addlist(String name, String firstname,String lastname,ModelMap model){
+	    	//System.out.println("id99999999999999id"+id);
+	    	 Account account=new  Account(01,name,firstname,lastname);
 	    	 listAccount.add(account);
-	    	 model.put("listAccount", listAccount);
+	    	 for(int i=0;i<listAccount.size();i++){
+		    		System.out.println("sdvdgfsfgsg"+listAccount.size());
+		    	System.out.println(listAccount.get(i).getId());
+		    	System.out.println(listAccount.get(i).getName());
+		    	System.out.println(listAccount.get(i).getFirstname());
+		    	System.out.println(listAccount.get(i).getLastname());
+		    		//System.out.println("fdgdggg");
+		       }
+	    	 //copyAccount(listAccountAcc,listAccount);
+	    	
+	    	 model.put("listAccount",listAccount);
 		     return "redirect:/";
 	    }
 	    //search
@@ -125,6 +221,7 @@ public class AccountController {
 	        }
 	    	List<Account> listAccountAcc = accountDao.getLimitAccountSearch(limit,(page*limit-limit),name);
 	    	listAccount=listAccountAcc;
+	    	
 	        model.put("page", page);
 	        model.put("limit", limit);
 		    model.put("totalrecord", totalrecord);
@@ -138,16 +235,19 @@ public class AccountController {
 	    
 	    //delete method post
 	    @RequestMapping(value="/delete",method=RequestMethod.POST)
-	    public String detete(@Valid Account account,BindingResult bidding, int id){
+	    public String detete(@Valid Account account,BindingResult bidding, @RequestParam("id") Integer id,@RequestParam("page") Integer page){
 	    	 accountDao.removeAccount(id);
-		     return "redirect:/";
+	    	 accountDao.setMsg("Xoa thanh cong Account "+id+" !");
+	    	 return "redirect:/thymeleafpage?page="+page;
 	    }
 	    
 	    //update or insert
 	    @RequestMapping(value = "/saveAccount", method = RequestMethod.POST)
-	    public String saveAccount(@Valid Account account,BindingResult bidding) {
-	        accountDao.editAccount(account);
-	        return "redirect:/";
+	    public String saveAccount(@Valid Account account,BindingResult bidding,
+	    		@RequestParam("page") Integer page) {
+	       accountDao.editAccount(account);
+	       accountDao.setMsg("Them thanh cong!");
+	        return "redirect:/thymeleafpage?page="+page;
 	    	
 	    }
 	    //delete method get
@@ -174,14 +274,26 @@ public class AccountController {
 	    }
 	    //edit method post
 	    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-	    public ModelAndView edit(int id) {
+	    public ModelAndView edit(@RequestParam("id") Integer id,@RequestParam("page") Integer page) {
 	        Account account = accountDao.get(id);
-	        ModelAndView model = new ModelAndView("AccountForm");
+	       // ModelAndView model = new ModelAndView("AccountForm");
+	        ModelAndView model = new ModelAndView("formedit");
 	        //List<Account> listAccount = accountDao.listAccount();
 	        //model.addObject("listAccount", listAccount);
 	        model.addObject("account", account);
+	        model.addObject("page", page);
+	        //model.addObject("id",id);
 	        //model.setViewName("list");
 	     
 	        return model;
+	    }
+	    //save edit
+	    @RequestMapping(value = "/saveedit", method = RequestMethod.POST)
+	    public String saveedit(@Valid Account account,BindingResult bidding,
+	    		@RequestParam("page") Integer page,@RequestParam("id") Integer id) {
+	       accountDao.editAccount(account);
+	       accountDao.setMsg("Sua thanh cong Account "+id+" !");
+	        return "redirect:/thymeleafpage?page="+page;
+	    	
 	    }
 }

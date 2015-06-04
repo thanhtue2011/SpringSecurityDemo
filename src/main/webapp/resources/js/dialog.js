@@ -3,13 +3,15 @@ function Xoa(id){
 		autoOpen: false,
         modal: true,
     buttons: {
+    	 "No":  function() {
+             dialog.dialog('close');
+         },
         "Yes": function() {
         	dialog.dialog('close');
-        	document.getElementById(id).submit();
-        	},
-        "Cancel":  function() {
-                 dialog.dialog('close');
-             }
+        	if(document.getElementById(id).submit())
+        		alert('done');
+        	}
+       
        
     }
 });

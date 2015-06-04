@@ -4,6 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
  <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
  
 <c:url var="firstUrl" value="/list?page=1" />
 <c:url var="lastUrl" value="/list?page=${iend}" />
@@ -11,7 +13,7 @@
 <c:url var="nextUrl" value="/list?page=${page+1}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>	
+<html xmlns:th="http://www.thymeleaf.org">	
 <head>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/css/jquery-1.7.2.min.js"></script>
@@ -89,6 +91,8 @@
                     <td>${account.firstname}</td>
                     <td>${account.lastname}</td>
                     <td>
+                    <input type="text" id="name" name="name" th:value="*{account.name}" />
+                       
                         <a href="/Springexample/editAccount?id=${account.id}&page=${page}">Edit</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="/Springexample/deleteAccount?id=${account.id}&page=${page}" onclick="return confirm('Ban co muon xoa?')">Delete</a>

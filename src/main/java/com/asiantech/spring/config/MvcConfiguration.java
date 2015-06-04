@@ -11,6 +11,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.asiantech.spring.dao.AccountDao;
 import com.asiantech.spring.dao.imple.AccountDaoImple;
@@ -20,15 +24,33 @@ import com.asiantech.spring.dao.imple.AccountDaoImple;
 @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurerAdapter{
  
+	@Bean
+    public TemplateResolver templateResolver(){
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+        templateResolver.setPrefix("/WEB-INF/pages/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+ 
+        return templateResolver;
+    }
+ 
     @Bean
-    public ViewResolver getViewResolver(){
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/pages/");
-        resolver.setSuffix(".jsp");
-        return resolver;
+    public SpringTemplateEngine templateEngine(){
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        return templateEngine;
+    }
+ 
+    @Bean
+    public ViewResolver viewResolver(){
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver() ;
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setOrder(1);
+ 
+        return viewResolver;
     }
      
-    @Override
+     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }

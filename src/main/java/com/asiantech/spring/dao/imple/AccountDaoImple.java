@@ -17,9 +17,13 @@ import org.springframework.stereotype.Repository;
 import com.asiantech.spring.dao.AccountDao;
 import com.asiantech.spring.etity.Account;
 public class AccountDaoImple implements AccountDao{
+	private String msg;
+	private static AccountDaoImple accounttest;
 	
 	private JdbcTemplate jdbcTemplate;
-	 
+	 public AccountDaoImple(){
+		 msg="";
+	 }
     public JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
 	}
@@ -194,4 +198,19 @@ public class AccountDaoImple implements AccountDao{
 	        return  listAccount; 
 	   
    }
+   public static AccountDaoImple getInstance(){
+	   
+	   return accounttest;
+	   
+   }
+@Override
+public void setMsg(String msg) {
+	// TODO Auto-generated method stub
+	this.msg=msg;
+} 
+@Override
+public String getMsg() {
+	// TODO Auto-generated method stub
+	return msg;
+} 
 }
