@@ -25,6 +25,7 @@ import com.asiantech.spring.dao.AccountDao;
 import com.asiantech.spring.etity.Account;
 import com.asiantech.spring.service.AccountService;
 @Controller
+@RequestMapping("/admin")
 public class AccountController {
 	    @Autowired
 	    private AccountDao accountDao;
@@ -35,6 +36,10 @@ public class AccountController {
 	    public List<Account> getAccounts() {
 	        return listAccount;
 	    }
+	    @RequestMapping("")
+		public String getIndex(){
+			return "redirect:admin/";
+		}
 	    @RequestMapping("/")
 	    public String listthymleaf( ModelMap model) {
 	    	int page=1;
@@ -58,7 +63,7 @@ public class AccountController {
 	        model.put("account", newAccount);
 	        return "listthymleaf";
 	    }
-	    @RequestMapping(value = "/thymeleafpage", method = RequestMethod.GET)
+	    @RequestMapping(value = "thymeleafpage", method = RequestMethod.GET)
 	    public ModelAndView getAccountThymeleaf(@RequestParam(value="page",required=false) Integer page,HttpServletRequest request,@RequestParam(value="limit",required=false) Integer limit) {
 	        if(page==null)
 	        	page=1;
@@ -238,7 +243,7 @@ public class AccountController {
 	    public String detete(@Valid Account account,BindingResult bidding, @RequestParam("id") Integer id,@RequestParam("page") Integer page){
 	    	 accountDao.removeAccount(id);
 	    	 accountDao.setMsg("Xoa thanh cong Account "+id+" !");
-	    	 return "redirect:/thymeleafpage?page="+page;
+	    	 return "redirect:/admin/thymeleafpage?page="+page;
 	    }
 	    
 	    //update or insert
@@ -247,7 +252,7 @@ public class AccountController {
 	    		@RequestParam("page") Integer page) {
 	       accountDao.editAccount(account);
 	       accountDao.setMsg("Them thanh cong!");
-	        return "redirect:/thymeleafpage?page="+page;
+	        return "redirect:/admin/thymeleafpage?page="+page;
 	    	
 	    }
 	    //delete method get
@@ -293,7 +298,7 @@ public class AccountController {
 	    		@RequestParam("page") Integer page,@RequestParam("id") Integer id) {
 	       accountDao.editAccount(account);
 	       accountDao.setMsg("Sua thanh cong Account "+id+" !");
-	        return "redirect:/thymeleafpage?page="+page;
+	        return "redirect:/admin/thymeleafpage?page="+page;
 	    	
 	    }
 }

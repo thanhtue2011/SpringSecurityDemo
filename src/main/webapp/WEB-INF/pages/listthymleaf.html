@@ -25,14 +25,14 @@
 function showAccount()
 {     
 	  var limit = document.getElementById( 'limit' ) ;
-      window.location = "/Springexample/thymeleafpage?limit="+limit.value ;
+      window.location = "/Springexample/admin/thymeleafpage?limit="+limit.value ;
 }
 </script>
 </head>
 <body>  
               <div class="bs-example" align="center">
                 <ul class="pagination" th:each="i : ${#numbers.sequence(1,((totalrecord)/limit)+(totalrecord%limit==0?0:1))}">
-					<li><a th:href="@{'/thymeleafpage?page='+${i}}"><label th:text="${i}">number</label></a></li>
+					<li><a th:href="@{'/admin/thymeleafpage?page='+${i}}"><label th:text="${i}">number</label></a></li>
 				</ul>
 			 </div>
 	  <label for="new">Shows in</label><form action=""><select name="limit" id="limit" onchange="showAccount()"> 
@@ -61,17 +61,17 @@ function showAccount()
         <td th:text="${prod.name}">name</td>
        <td th:text="${prod.firstname}">firstname</td>
         <td th:text="${prod.lastname}">lastname</td>
-        <td><form  th:action="@{/delete}" method="Post" th:object="${account}" th:id="${prod.id}" ><input type="hidden" name="id" th:value="${prod.id}" />
+        <td><form  th:action="@{/admin/delete}" method="Post" th:object="${account}" th:id="${prod.id}" ><input type="hidden" name="id" th:value="${prod.id}" />
         <input type="hidden" th:value="${page+(listAccount.size()==1?-1:0)}" name="page"/>
         </form><input type="button" value="Del" th:onclick="'javascript:Xoa(\''+${prod.id}+'\');'"/></td>
-         <td><form  th:action="@{/edit}" method="Post" th:object="${account}"><input type="hidden" name="id" th:value="${prod.id}"/>
+         <td><form  th:action="@{/admin/edit}" method="Post" th:object="${account}"><input type="hidden" name="id" th:value="${prod.id}"/>
         <input type="hidden" th:value="${page}" name="page"/><input type="submit" value="Edit"/>
         </form></td>
       </tr>
   </tbody>
 </table>
 </div>
-<form th:action="@{/saveAccount}" th:object="${account}" method="post" onsubmit="return checkForm();" class="smart-green">
+<form th:action="@{/admin/saveAccount}" th:object="${account}" method="post" onsubmit="return checkForm();" class="smart-green">
     <h1>New Account Form 
         <span>Please fill all the texts in the fields.</span>
     </h1>
